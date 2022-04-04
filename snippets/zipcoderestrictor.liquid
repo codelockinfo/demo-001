@@ -1,0 +1,68 @@
+{% assign min = 1 %}
+{% assign max = 800000 %}
+{% assign diff = max | minus: min %}
+{% assign randomNumber = "now" | date:"%N" | module: diff | plus:min %}
+
+<link rel="stylesheet" type="text/css" href="https://zipcode-validator.appjetty.com/assets/front/css/zipcoderestrict.css?v={{randomNumber}}">
+
+<style>
+  .ZipCodeRestrict .success_msg.message,.ZipCodeRestrict .estimation_msg.message,.ZipCodeRestrict .error_msg.message,.ZipCodeRestrict .not_valid_error_msg.message{padding: 5px; margin-top: 10px; margin-bottom: 10px;display:none; padding-left: 10px;}
+  .ZipCodeRestrict .zipcodecheck_area img{width: 30px; vertical-align: middle;}
+  .ZipCodeRestrict .block_label_text{padding-left: 5px; font-weight: bold;}
+  .ZipCodeRestrict .zipcode_validation{padding-bottom: 10px;padding-top: 10px;display:flex;}
+  .ZipCodeRestrict .zipcode_input{width: 70%; min-height: 40px !important; display: unset;}
+  .ZipCodeRestrict .zipcode_submit{border: unset;width: 27%; margin-left: 3%; min-height: 40px;}
+  .ZipCodeRestrict .empty_val_error{display:none; padding-bottom: 6px;color: red;}
+  .ZipCodeRestrict{width:100%;}
+  .iti { width: 100%; }
+</style>
+
+<script>
+  
+  if(typeof jQuery == 'undefined'){
+    var headTag = document.getElementsByTagName("head")[0];
+    var jqTag   = document.createElement('script');	
+    jqTag.type  = 'text/javascript';
+    jqTag.src   = 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js';
+    headTag.appendChild(jqTag);
+
+  }
+  
+  var product_name = "";
+  {% if template.name == 'product' %}
+      {% assign zipcode_global_data = shop.metafields.appjetty_zipcode.global_data %}
+      $('.ZipCodeRestrict').append('{{shop.metafields.appjetty_zipcode.zipcode_html}}');
+
+        {% if zipcode_global_data.prod_config_status != 'all_prod'%}
+          $('.ZipCodeRestrict').hide();
+      {% endif %}                   
+
+      var product_id = "{{ product.id }}";
+      var product_name = "{{ product.title}}";
+      var collection_id = [];
+      var zipcode_app_status = '{{shop.metafields.appjetty_zipcode.global_data.zipcode_app_status}}';
+      var restriction_btn_status = '{{shop.metafields.appjetty_zipcode.global_data.restriction_btn_status}}';
+      var global_restriction_btn_status = '{{shop.metafields.appjetty_zipcode.global_data.global_restriction_btn_status}}';
+      var add_to_cart_btn_selector = '{{shop.metafields.appjetty_zipcode.global_data.add_to_cart_btn_selector}}';
+      var button_text = '{{shop.metafields.appjetty_zipcode.global_data.button_text}}';
+      var estimation_msg = '{{shop.metafields.appjetty_zipcode.global_data.estimation_msg}}';
+      var prod_config_status = '{{shop.metafields.appjetty_zipcode.global_data.prod_config_status}}';
+      var domain="{{shop.domain}}";
+      var waiting_list_btn_status = '{{shop.metafields.appjetty_zipcode.global_data.waiting_list_btn_status}}';
+  
+      {% for collection in product.collections %}
+          collection_id.push("{{ collection.id }}");
+      {% endfor %}
+
+      var time = new Date().getTime();
+      var headTag = document.getElementsByTagName("head")[0];
+      var jqTag   = document.createElement('script');
+      jqTag.type  = 'text/javascript';
+      jqTag.src   = 'https://zip-validator.appjetty.com/assets/front/js/zipcoderestrict.js?v='+time;
+      headTag.appendChild(jqTag);
+
+  {% endif %}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
